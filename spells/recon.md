@@ -79,3 +79,22 @@ sudo nbtscan -r <aaa.bbb.ccc.0/24>
 nmap -v -p 139,445 --script=smb-* <ip>
 ```
 ---
+# NFS
+
+### NFS simple scan using NMAP
+```bash
+nmap -v -p 111 <ip/ip_range>
+```
+---
+
+### NFS scan with a banner and rpcinfo scripts using NMAP
+```bash
+nmap -sV -p 111 --script=rpcinfo <ip/ip_range>
+```
+---
+
+### NSF scan with NSF scripts using NMAP
+```bash
+nmap -p 111 --script=nfs* <ip>
+```
+---
