@@ -62,3 +62,20 @@ nmap -v -sn <aaa.bbb.ccc.1-254> -oG <file_name>
 nmap -sT -A --top-ports=<num_ports> <aaa.bbb.ccc.1-254> -oG <file_name>
 ```
 ---
+# SMB
+
+### SMB scan using NMAP
+```bash
+nmap -v -p 139,445 -oG <output_file> <ip/ip_range>
+```
+---
+### SMB scan using nbtscan
+```bash
+sudo nbtscan -r <aaa.bbb.ccc.0/24>
+```
+---
+### SMB scan using NMAP scripts
+```bash
+nmap -v -p 139,445 --script=smb-* <ip>
+```
+---
