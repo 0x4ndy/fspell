@@ -6,3 +6,5 @@ This repository contains a list of my favourite and most used spells (commands a
 - [DNS](https://github.com/0x4ndy/favourite-spells/blob/master/spells/recon.md#DNS)
 - [Ports](https://github.com/0x4ndy/favourite-spells/blob/master/spells/recon.md#Ports)
 - [SMB](https://github.com/0x4ndy/favourite-spells/blob/master/spells/recon.md#SMB)
+### [Transfers](https://github.com/0x4ndy/favourite-spells/blob/master/spells/transfers.md)
+- [NSF](https://github.com/0x4ndy/favourite-spells/blob/master/spells/transfers.md#NFS)
