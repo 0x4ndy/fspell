@@ -1,4 +1,4 @@
-use std::fs::{self, File};
+use std::fs::{self, File, ReadDir};
 use std::io::{self, BufRead};
 use std::path::Path;
 
@@ -13,11 +13,26 @@ fn main() {
     let spell_files =
         fs::read_dir("../spells/").expect("Something went wrong while reading directory.");
 
-    let mut spell_list: Vec<Spell> = Vec::new();
+    let spell_list: Vec<Spell> = files_to_spells(spell_files);
 
-    for file in spell_files {
+    for spell in &spell_list {
+        println!("{}:{} - {}\n{}", spell.category, spell.sub_category, spell.title, spell.code);
+    }
+}
+
+fn files_to_spells(dir_content: ReadDir) -> Vec<Spell> {
+    let mut spell_list: Vec<Spell> = Vec::new();
+     
+    for file in dir_content {
         if let Ok(lines) = read_lines(file.as_ref().unwrap().path()) {
-            let current_category = String::from(file.unwrap().path().file_stem().unwrap().to_str().unwrap());
+            let current_category = String::from(
+                file.unwrap()
+                .path()
+                .file_stem()
+                .unwrap()
+                .to_str()
+                .unwrap());
+
             let mut in_spell = false;
             let mut current_sub_category = String::from("");
             let mut current_title = String::from("");
@@ -57,10 +72,9 @@ fn main() {
             }
         }
 
-        for spell in &spell_list {
-            println!("{}:{} - {}\n{}", spell.category, spell.sub_category, spell.title, spell.code);
-        }
     }
+
+    spell_list
 }
 
 fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
