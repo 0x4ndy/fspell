@@ -14,7 +14,7 @@ fn main() {
     let spell_files =
         fs::read_dir("../spells/").expect("Something went wrong while reading directory.");
 
-    let spell_list: Vec<Spell> = files_to_spells(spell_files);
+    let spell_list: Vec<Spell> = files_to_spells(spell_files).unwrap();
 
     for spell in &spell_list {
         println!("{}: {} - {}\nFile: {}\n{}", spell.category, spell.sub_category, spell.title, spell.file_name, spell.code);
@@ -73,29 +73,20 @@ fn lines_to_spells(file: DirEntry, lines: io::Lines<io::BufReader<File>>) -> Vec
     spell_list
 }
 
-fn files_to_spells(dir_content: ReadDir) -> Vec<Spell> {
+fn files_to_spells(dir_content: ReadDir) -> Result<Vec<Spell>, io::Error> {
     let mut spell_list: Vec<Spell> = Vec::new();
      
     for dir_entry in dir_content {
 
-        let file = match dir_entry {
-            Err(e) => panic!("Can't process the file: {e}"),
-            Ok(file) => file,
-        };
-
+        let file = dir_entry?;
         let file_path = file.path();
-
-        let lines = match read_lines(file_path) {
-            Err(e) => panic!("{e}"),
-            Ok(lines) => lines,
-        };
-
+        let lines = read_lines(file_path)?;
         let mut spells = lines_to_spells(file, lines);
 
         spell_list.append(&mut spells);
     }
 
-    spell_list
+    Ok(spell_list)
 }
 
 fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
