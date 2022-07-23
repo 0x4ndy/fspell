@@ -98,3 +98,41 @@ nmap -sV -p 111 --script=rpcinfo <ip/ip_range>
 nmap -p 111 --script=nfs* <ip>
 ```
 ---
+
+# SMTP
+
+### SMTP enumeration with netcat
+```bash
+nc -nv <ip> <port> # e.g.: nc -nv 10.10.1.10 25
+VRFY <username>
+EXPN <mailbox>
+```
+---
+
+### SMTP enumeration using Python script
+```python
+#!/usr/bin/python3
+
+import socket
+import sys
+
+if len(sys.argv) != 3:
+    print("Usage: smtp-scan.py <ip> <username>")
+    sys.exit(0)
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+connect = s.connect((sys.argv[1], 25))
+
+banner = s.recv(1024)
+
+print(banner)
+
+cmd = "VRFY {}\r\n".format(sys.argv[2]);
+s.send(cmd.encode())
+result = s.recv(1024)
+
+print(result)
+s.close()
+```
+---
