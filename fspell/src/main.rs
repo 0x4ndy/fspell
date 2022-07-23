@@ -1,6 +1,11 @@
+mod config;
+
+use std::error::Error;
 use std::fs::{self, File, ReadDir, DirEntry};
 use std::io::{self, BufRead};
 use std::path::Path;
+
+use crate::config::Config;
 
 struct Spell {
     title: String,
@@ -10,15 +15,20 @@ struct Spell {
     file_name: String,
 }
 
-fn main() {
+fn main() -> Result<(), Box<dyn Error>> {
+
+    let config = Config::from("examples/config.json")?;
+
     let spell_files =
-        fs::read_dir("../spells/").expect("Something went wrong while reading directory.");
+        fs::read_dir(config.spells_dir).expect("Something went wrong while reading directory.");
 
     let spell_list: Vec<Spell> = files_to_spells(spell_files).unwrap();
 
     for spell in &spell_list {
         println!("{}: {} - {}\nFile: {}\n{}", spell.category, spell.sub_category, spell.title, spell.file_name, spell.code);
     }
+
+    Ok(())
 }
 
 fn lines_to_spells(file: DirEntry, lines: io::Lines<io::BufReader<File>>) -> Vec<Spell> {
