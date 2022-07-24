@@ -19,10 +19,8 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let config = Config::from("examples/config.json")?;
 
-    let spell_files =
-        fs::read_dir(config.spells_dir).expect("Something went wrong while reading directory.");
-
-    let spell_list: Vec<Spell> = files_to_spells(spell_files).unwrap();
+    let spell_files = fs::read_dir(config.spells_dir)?; 
+    let spell_list: Vec<Spell> = files_to_spells(spell_files)?;
 
     for spell in &spell_list {
         println!("{}: {} - {}\nFile: {}\n{}", spell.category, spell.sub_category, spell.title, spell.file_name, spell.code);
