@@ -12,6 +12,7 @@ struct Spell {
     code: String,
     category: String,
     sub_category: String,
+    tool: String,
     file_name: String,
 }
 
@@ -23,7 +24,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let spell_list: Vec<Spell> = files_to_spells(spell_files)?;
 
     for spell in &spell_list {
-        println!("{}: {} - {}\nFile: {}\n{}", spell.category, spell.sub_category, spell.title, spell.file_name, spell.code);
+        println!("{}: {} - {} (using: {})\nFile: {}\n{}", spell.category, spell.sub_category, spell.title, spell.tool, spell.file_name, spell.code);
     }
 
     Ok(())
@@ -65,6 +66,7 @@ fn lines_to_spells(file: DirEntry, lines: io::Lines<io::BufReader<File>>) -> Vec
                    code: String::from(&current_code),
                    category: String::from(&current_category),
                    sub_category: String::from(&current_sub_category),
+                   tool: String::from(""),
                    file_name: String::from("file"),
                 };
 
