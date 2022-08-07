@@ -2,6 +2,7 @@ mod args;
 mod config;
 mod spell_handler;
 
+use crossterm::style::Stylize;
 use std::error::Error;
 
 use crate::args::Args;
@@ -13,7 +14,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         Ok(args) => args,
         Err(e) => {
             Args::print_help();
-            return Err(e); 
+            return Err(e);
         }
     };
 
@@ -22,7 +23,11 @@ fn main() -> Result<(), Box<dyn Error>> {
         config_file = args.config_file;
     }
 
-    println!("Using config: {}", config_file);
+    println!(
+        "{} {}",
+        "Using config:".green(),
+        config_file.clone().bold().underlined()
+    );
 
     let search_parameters: SearchParameters = SearchParameters {
         category: args.category_name,
@@ -42,12 +47,12 @@ fn main() -> Result<(), Box<dyn Error>> {
     println!();
     for spell in spell_list {
         println!(
-            "{}: {} - {} (using: {})\n{}",
-            spell.category,
-            spell.sub_category,
-            spell.title,
-            spell.tool,
-            spell.code
+            "{}: {} - {} (using: {})\n{}\n",
+            spell.category.trim().green(),
+            spell.sub_category.trim().green(),
+            spell.title.trim(),
+            spell.tool.trim().blue(),
+            spell.code.trim().clone().on_dark_grey()
         );
     }
 

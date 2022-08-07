@@ -2,6 +2,8 @@ use std::fs::{self, DirEntry, File, ReadDir};
 use std::io::{self, BufRead};
 use std::path::Path;
 
+use crossterm::style::Stylize;
+
 use crate::config::Config;
 
 #[derive(Clone)]
@@ -145,7 +147,11 @@ impl SpellHandler {
     }
 
     fn read_files(config: Config) -> Result<ReadDir, std::io::Error> {
-        println!("Reading spells from: {}", config.spells_dir);
+        println!(
+            "{} {}",
+            "Reading spells from:".green(),
+            config.spells_dir.clone().bold().underlined()
+        );
 
         match fs::read_dir(&config.spells_dir) {
             Ok(v) => Ok(v),
