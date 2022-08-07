@@ -1,6 +1,35 @@
 # Favourite Spells
 This repository contains a list of my favourite and most used spells (commands and arguments), separated into a number of categories categories. See the list of categories below.
 
+## Set up
+Checkout the GitHub repository:
+```bash
+git clone https://github.com/0x4ndy/fspell.git <project-directory>
+```
+The source code is located under ``<project-directory>/fspell`` directory
+
+## Usage
+```bash
+fspell --help
+```
+```bash
+Favorite Spells 0.2.0
+
+https://github.com/0x4ndy/fspell
+
+USAGE:
+    fspell [OPTIONS]
+
+    OPTIONS:
+        -a, --category <category_name>          Category name of the spell.
+        -b, --subcategory <subcategory_name>    Sub-category name of the spell.
+        -c, --config <config_file>              Configuration file.
+        -h, --help                              Print help information
+        -s, --search <search_string>            Search string.
+        -t, --tool <tool_name>                  Tool name of the spell.
+        -V, --version                           Print version information
+```
+
 ## Table of Contents
 ### [Fuzzing](https://github.com/0x4ndy/fspell/blob/master/spells/fuzzing.md)
 - [Web Files](https://github.com/0x4ndy/fspell/blob/master/spells/fuzzing.md#Web_Files)
