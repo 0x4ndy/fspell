@@ -30,14 +30,24 @@ dnsrecon -d <domain_name> -t axfr
 dnsrecon -d <domain_name> -D <word_list> -t brt
 ```
 ---
+### dnsenum: DNS enumeration
+```bash
+dnsenum <domain_name>
+```
+---
+### nmap: DNS zone transfer
+```bash
+nmap --script=dns-zone-transfer -p 53 <dns_server/domain>
+```
+---
 # Ports
 
-### nc: TCP CONNECT scanning using netcat
+### nc: TCP scan with timeout (-w) and zero-I/O (-z)
 ```bash
 nc -nvv -w <timeout_seconds> -z <ip> <port/port_range>
 ```
 ---
-### nc: UDP scanning using netcat
+### nc: UDP scan with timeout (-w) and zero-I/O (-z)
 ```bash
 nc -nv -u -z -w <timeout_seconds> <ip> <port/port_range>
 ```
@@ -52,14 +62,44 @@ sudo nmap --top-ports <num_ports> -sC -sV <ip> --open --reason
 sudo nmap -p- -sC -sV <ip> --open --reason
 ```
 ---
+### nmap: TCP Connect scanning
+```bash
+nmap -sT <ip>
+```
+---
 ### nmap: Network sweep using NMAP
 ```bash
 nmap -v -sn <aaa.bbb.ccc.1-254> -oG <file_name>
 ```
 ---
+### nmap: UDP scan
+```bash
+sudo nmap -sU <ip>
+```
+---
+### nmap: UDP + TCP SYN scan
+```bash
+sudo nmap -sS -sU <ip>
+```
+---
+### nmap: Scan with banner grapping/service enumeration
+```bash
+nmap -sV -sT -A <ip>
+```
+---
 ### nmap: Network top N port sweep with OS, script and traceroute enabled, using NMAP
 ```bash
 nmap -sT -A --top-ports=<num_ports> <aaa.bbb.ccc.1-254> -oG <file_name>
+```
+---
+### nmap: OS (Operating System) Fingerprinting
+```bash
+sudo nmap -O <ip>
+```
+---
+### masscan: scan port 80 of the whole subnet, e.g. class X subnet (not allowed in PWK lab)
+```bash
+sudo masscan -p80 <ip/mask> --rate=1000 -e <network_interface> --router-ip <router_ip>
 ```
 ---
 # SMB
