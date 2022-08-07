@@ -41,59 +41,26 @@ impl SpellHandler {
         self._spell_list.clone()
     }
 
-    pub fn search_spell(&self, search_parameters: SearchParameters) -> Vec<Spell> {
-        let tmp_results: Vec<Spell> = self
-            ._spell_list
-            .clone()
-            .into_iter()
-            .filter(|spell| {
-                if search_parameters.category.is_empty() {
-                    true
-                } else {
-                    *spell.category == search_parameters.category
-                }
-            })
-            .filter(|spell| {
-                if search_parameters.sub_category.is_empty() {
-                    true
-                } else {
-                    *spell.sub_category == search_parameters.sub_category
-                }
-            })
-            .filter(|spell| {
-                if search_parameters.tool.is_empty() {
-                    true
-                } else {
-                    *spell.tool == search_parameters.tool
-                }
-            })
-            .filter(|spell| {
-                if search_parameters.search_str.is_empty() {
-                    true
-                } else {
-                    //*spell.search_str.contains(search_parameters.search_str)
-                    true
-                }
-            })
-            .collect();
+    pub fn search_spell<'a>(
+        &'a self,
+        search_parameters: &'a SearchParameters,
+    ) -> impl Iterator<Item = &'a Spell> {
+        let search_str = search_parameters.search_str.to_lowercase();
 
-        // TODO: replace this part by including in the filer above  
-        let mut results: Vec<Spell> = Vec::new();
-        for spell in tmp_results {
-            if search_parameters.search_str.is_empty() {
-                results.push(spell);
-            } else {
-                if spell
-                    .title
-                    .to_lowercase()
-                    .contains(&search_parameters.search_str.to_lowercase())
-                {
-                    results.push(spell);
-                }
-            }
-        }
-
-        results
+        self._spell_list
+            .iter()
+            .filter(|spell| {
+                search_parameters.category.is_empty()
+                    || *spell.category == search_parameters.category
+            })
+            .filter(|spell| {
+                search_parameters.sub_category.is_empty()
+                    || *spell.sub_category == search_parameters.sub_category
+            })
+            .filter(|spell| {
+                search_parameters.tool.is_empty() || *spell.tool == search_parameters.tool
+            })
+            .filter(move |spell| search_str.is_empty() || spell.title.contains(&search_str))
     }
 
     fn lines_to_spells(file: DirEntry, lines: io::Lines<io::BufReader<File>>) -> Vec<Spell> {
