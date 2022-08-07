@@ -34,7 +34,7 @@ ffuf -w <wordlist>:FUZZ -u http(s)://FUZZ.<domain-name>
 ```
 ---
 
-# Vhosts
+# VHosts
 
 ### FFuF: Fuzzing Vhosts with FFuf
 ```bash
