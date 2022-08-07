@@ -45,22 +45,27 @@ impl SpellHandler {
         &'a self,
         search_parameters: &'a SearchParameters,
     ) -> impl Iterator<Item = &'a Spell> {
-        let search_str = search_parameters.search_str.to_lowercase();
-
         self._spell_list
             .iter()
             .filter(|spell| {
                 search_parameters.category.is_empty()
-                    || *spell.category == search_parameters.category
+                    || *spell.category.to_lowercase() == search_parameters.category
             })
             .filter(|spell| {
                 search_parameters.sub_category.is_empty()
-                    || *spell.sub_category == search_parameters.sub_category
+                    || *spell.sub_category.to_lowercase() == search_parameters.sub_category
             })
             .filter(|spell| {
-                search_parameters.tool.is_empty() || *spell.tool == search_parameters.tool
+                search_parameters.tool.is_empty()
+                    || *spell.tool.to_lowercase() == search_parameters.tool
             })
-            .filter(move |spell| search_str.is_empty() || spell.title.contains(&search_str))
+            .filter(move |spell| {
+                search_parameters.search_str.is_empty()
+                    || spell
+                        .title
+                        .to_lowercase()
+                        .contains(&search_parameters.search_str)
+            })
     }
 
     fn lines_to_spells(file: DirEntry, lines: io::Lines<io::BufReader<File>>) -> Vec<Spell> {

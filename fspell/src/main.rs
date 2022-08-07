@@ -39,14 +39,14 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let spell_list = spell_handler.search_spell(&search_parameters);
 
+    println!();
     for spell in spell_list {
         println!(
-            "{}: {} - {} (using: {})\nFile: {}\n{}",
+            "{}: {} - {} (using: {})\n{}",
             spell.category,
             spell.sub_category,
             spell.title,
             spell.tool,
-            spell.file_name,
             spell.code
         );
     }

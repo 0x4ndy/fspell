@@ -41,15 +41,30 @@ impl Args {
         let matches = app.get_matches();
 
         Ok(Args {
-            config_file: String::from(matches.value_of("config_file").unwrap_or("")),
+            config_file: String::from(matches.value_of("config_file").unwrap_or("").to_lowercase()),
             is_config_file_set: matches.is_present("config_file"),
-            category_name: String::from(matches.value_of("category_name").unwrap_or("")),
+            category_name: String::from(
+                matches
+                    .value_of("category_name")
+                    .unwrap_or("")
+                    .to_lowercase(),
+            ),
             is_category_name_set: matches.is_present("category_name"),
-            subcategory_name: String::from(matches.value_of("subcategory_name").unwrap_or("")),
+            subcategory_name: String::from(
+                matches
+                    .value_of("subcategory_name")
+                    .unwrap_or("")
+                    .to_lowercase(),
+            ),
             is_subcategory_name_set: matches.is_present("subcategory_name"),
-            tool_name: String::from(matches.value_of("tool_name").unwrap_or("")),
+            tool_name: String::from(matches.value_of("tool_name").unwrap_or("").to_lowercase()),
             is_tool_name_set: matches.is_present("tool_name"),
-            search_string: String::from(matches.value_of("search_string").unwrap_or("")),
+            search_string: String::from(
+                matches
+                    .value_of("search_string")
+                    .unwrap_or("")
+                    .to_lowercase(),
+            ),
             is_search_string_set: matches.is_present("search_string"),
         })
     }

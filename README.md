@@ -29,6 +29,10 @@ USAGE:
         -t, --tool <tool_name>                  Tool name of the spell.
         -V, --version                           Print version information
 ```
+Example:
+```bash
+fspell -a recon -b dns
+```
 
 ## Table of Contents
 ### [Fuzzing](https://github.com/0x4ndy/fspell/blob/master/spells/fuzzing.md)
