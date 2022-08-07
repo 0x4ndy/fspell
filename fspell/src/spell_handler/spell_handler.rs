@@ -67,6 +67,14 @@ impl SpellHandler {
                     *spell.tool == search_parameters.tool
                 }
             })
+            .filter(|spell| {
+                if search_parameters.search_str.is_empty() {
+                    true
+                } else {
+                    //*spell.search_str.contains(search_parameters.search_str)
+                    true
+                }
+            })
             .collect();
 
         // TODO: replace this part by including in the filer above  
