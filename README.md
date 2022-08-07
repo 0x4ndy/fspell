@@ -4,7 +4,7 @@ This repository contains a list of my favourite and most used spells (commands a
 ## Table of Contents
 ### [Fuzzing](https://github.com/0x4ndy/fspell/blob/master/spells/fuzzing.md)
 - [Web Files](https://github.com/0x4ndy/fspell/blob/master/spells/fuzzing.md#Web_Files)
-- [Web Directories](https://github.com/0x4ndy/fspell/blob/master/spells/fuzzing.md#Web Directories)
+- [Web Directories](https://github.com/0x4ndy/fspell/blob/master/spells/fuzzing.md#Web_Directories)
 - [Sub-domains](https://github.com/0x4ndy/fspell/blob/master/spells/fuzzing.md#Sub-domains)
 - [VHosts](https://github.com/0x4ndy/fspell/blob/master/spells/fuzzing.md#VHosts)
 - [Parameters](https://github.com/0x4ndy/fspell/blob/master/spells/fuzzing.md#Parameters)
