@@ -1,108 +1,49 @@
+mod args;
 mod config;
+mod spell_handler;
 
 use std::error::Error;
-use std::fs::{self, File, ReadDir, DirEntry};
-use std::io::{self, BufRead};
-use std::path::Path;
 
+use crate::args::Args;
 use crate::config::Config;
-
-struct Spell {
-    title: String,
-    code: String,
-    category: String,
-    sub_category: String,
-    tool: String,
-    file_name: String,
-}
+use crate::spell_handler::*;
 
 fn main() -> Result<(), Box<dyn Error>> {
+    let args = Args::new()?;
 
-    let config = Config::from("examples/config.json")?;
+    let mut config_file = Config::get_config_path();
+    if args.is_config_file_set() {
+        config_file = args.config_file;
+    }
 
-    let spell_files = fs::read_dir(config.spells_dir)?; 
-    let spell_list: Vec<Spell> = files_to_spells(spell_files)?;
+    println!("Using config: {}", config_file);
+
+    let search_parameters: SearchParameters = SearchParameters {
+        category: args.category_name,
+        sub_category: args.subcategory_name,
+        tool: args.tool_name,
+        search_str: args.search_string,
+    };
+
+    println!("{:?}", search_parameters);
+
+    let config = Config::from(config_file.as_str())?;
+
+    let spell_handler = SpellHandler::from_config(config)?;
+
+    let spell_list = spell_handler.search_spell(search_parameters);
 
     for spell in &spell_list {
-        println!("{}: {} - {} (using: {})\nFile: {}\n{}", spell.category, spell.sub_category, spell.title, spell.tool, spell.file_name, spell.code);
+        println!(
+            "{}: {} - {} (using: {})\nFile: {}\n{}",
+            spell.category,
+            spell.sub_category,
+            spell.title,
+            spell.tool,
+            spell.file_name,
+            spell.code
+        );
     }
 
     Ok(())
-}
-
-fn lines_to_spells(file: DirEntry, lines: io::Lines<io::BufReader<File>>) -> Vec<Spell> {
-    let mut spell_list: Vec<Spell> = Vec::new();
-    let current_category = String::from(
-        file
-        .path()
-        .file_stem()
-        .unwrap()
-        .to_str()
-        .unwrap());
-
-    let mut in_spell = false;
-    let mut current_sub_category = String::from("");
-    let mut current_title = String::from("");
-    let mut current_code = String::from("");
-
-    for (i, line) in lines.enumerate() {
-        if let Ok(line) = line {
-            if line.starts_with("# ") {
-                match line.as_str().split_once(" ") {
-                    None => panic!("Line {} is marked as category name, but it doesn't contain any value.", i),
-                    Some((_, sub_cat)) => current_sub_category = String::from(sub_cat),
-                }
-            } else if line.starts_with("### ") {
-                match line.as_str().split_once(" ") {
-                    None => panic!("Line {} is marked as spell title, but it doesn't contain any value.", i),
-                    Some((_, title)) => {
-                        current_title = String::from(title);
-                        in_spell = true;
-                    },
-                }
-            } else if line == "---" {
-                let spell = Spell {
-                   title: String::from(&current_title),
-                   code: String::from(&current_code),
-                   category: String::from(&current_category),
-                   sub_category: String::from(&current_sub_category),
-                   tool: String::from(""),
-                   file_name: String::from("file"),
-                };
-
-                spell_list.push(spell); 
-
-                in_spell = false;
-                current_code = String::from("");
-            } else if !line.starts_with("```") && in_spell {
-                current_code.push_str(format!("{}\n", line).as_str());
-            }
-        }
-    }
-
-    spell_list
-}
-
-fn files_to_spells(dir_content: ReadDir) -> Result<Vec<Spell>, io::Error> {
-    let mut spell_list: Vec<Spell> = Vec::new();
-     
-    for dir_entry in dir_content {
-
-        let file = dir_entry?;
-        let file_path = file.path();
-        let lines = read_lines(file_path)?;
-        let mut spells = lines_to_spells(file, lines);
-
-        spell_list.append(&mut spells);
-    }
-
-    Ok(spell_list)
-}
-
-fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
-where
-    P: AsRef<Path>,
-{
-    let file = File::open(filename)?;
-    Ok(io::BufReader::new(file).lines())
 }
