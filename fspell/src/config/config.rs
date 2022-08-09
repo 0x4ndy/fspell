@@ -1,5 +1,5 @@
 use dirs::home_dir;
-use std::{fs, io};
+use std::{fs, io, path::Path};
 
 use serde::{Deserialize, Serialize};
 
@@ -9,15 +9,6 @@ pub struct Config {
 }
 
 impl Config {
-    pub fn get_config_path() -> String {
-        let config_path = format!(
-            "{}/{}",
-            home_dir().unwrap().to_str().unwrap(),
-            DEFAULT_CONFIG_PATH
-        );
-
-        config_path
-    }
 
     pub fn from(config_path: &str) -> Result<Config, io::Error> {
         let config_str = match fs::read_to_string(config_path) {
@@ -44,8 +35,24 @@ impl Config {
     }
 
     pub fn new() -> Result<Config, io::Error> {
-        Config::from(Config::get_config_path().as_str())
+        Config::from(Config::get_config_path()?.as_str())
+    }
+
+    fn get_config_path() -> Result<String, io::Error> {
+
+        // go through the list of default locations  
+
+        Ok(String::from(""))
+    }
+
+    fn get_default_paths() -> Vec<String> {
+        let mut default_paths: Vec<String> = Vec::new();
+
+        default_paths.push(String::from("./config/config.json"));
+        default_paths.push(format!("{}/{}", home_dir().unwrap().to_str().unwrap(), ".config/fspell/config.json"));
+
+        default_paths
     }
 }
 
-const DEFAULT_CONFIG_PATH: &str = ".config/fspell/config.json";
+const DEFAULT_CONFIG_PATH: &str = "./config/config.json";
