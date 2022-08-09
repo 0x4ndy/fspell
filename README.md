@@ -46,6 +46,7 @@ fspell -a recon -b dns
 - [Ports](https://github.com/0x4ndy/fspell/blob/master/spells/recon.md#Ports)
 - [SMB](https://github.com/0x4ndy/fspell/blob/master/spells/recon.md#SMB)
 - [SMTP](https://github.com/0x4ndy/fspell/blob/master/spells/recon.md#SMTP)
+- [SNMP](https://github.com/0x4ndy/fspell/blob/master/spells/recon.md#SNMP)
 ### [Transfers](https://github.com/0x4ndy/fspell/blob/master/spells/transfers.md)
 - [NSF](https://github.com/0x4ndy/fspell/blob/master/spells/transfers.md#NFS)
 ### [XSS](https://github.com/0x4ndy/fspell/blob/master/spells/xss.md)

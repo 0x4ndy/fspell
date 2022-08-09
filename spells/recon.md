@@ -40,6 +40,7 @@ dnsenum <domain_name>
 nmap --script=dns-zone-transfer -p 53 <dns_server/domain>
 ```
 ---
+
 # Ports
 
 ### nc: TCP scan with timeout (-w) and zero-I/O (-z)
@@ -102,6 +103,7 @@ sudo nmap -O <ip>
 sudo masscan -p80 <ip/mask> --rate=1000 -e <network_interface> --router-ip <router_ip>
 ```
 ---
+
 # SMB
 
 ### nmap: SMB scan using NMAP
@@ -174,5 +176,57 @@ result = s.recv(1024)
 
 print(result)
 s.close()
+```
+---
+
+# SNMP
+
+### nmap: SNMP scan for open ports
+```bash
+sudo nmap -sU --open -p 161 <aaa.bbb.ccc.1-254> -oG <output_file>
+```
+---
+
+### onesixtyone: SNMP brute force attach against a list of IP addresses
+```bash
+onesixtyone -c <community_file> -i <ip_file>
+```
+---
+
+### onesixtyone: example of possible SNMP community strings
+```bash
+public
+private
+manager
+```
+---
+
+### snmpwalk: entire SNMP MIB tree enumeration
+```bash
+snmpwalk -c <community_string> -v1 -t <timeout_seconds> <ip>
+```
+---
+
+### snmpwalk: SNMP enumerating Windows users
+```bash
+snmpwalk -c <community_string> -v1 <ip> 1.3.6.1.4.1.77.1.2.25
+```
+---
+
+### snmpwalk: SNMP enumerating running Windows processes
+```bash
+snmpwalk -c <community_string> -v1 <ip> 1.3.6.1.2.1.25.4.2.1.2
+```
+---
+
+### snmpwalk: SNMP enumerating open TCP ports
+```bash
+snmpwalk -c <community_string> -v1 <ip> 1.3.6.1.2.1.6.13.1.3
+```
+---
+
+### snmpwalk: SNMP enumerating installed software
+```bash
+snmpwalk -c <community_string> -v1 <ip> 1.3.6.1.2.1.25.6.3.1.2
 ```
 ---
