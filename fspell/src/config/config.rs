@@ -2,6 +2,7 @@ use dirs::home_dir;
 use std::{fs, io, path::Path};
 
 use serde::{Deserialize, Serialize};
+use crossterm::style::Stylize;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Config {
@@ -11,6 +12,12 @@ pub struct Config {
 impl Config {
 
     pub fn from(config_path: &str) -> Result<Config, io::Error> {
+        println!(
+            "{} {}",
+            "Using config:".green(),
+            config_path.bold().underlined()
+        );
+
         let config_str = match fs::read_to_string(config_path) {
             Ok(v) => v,
             Err(e) => {
@@ -38,11 +45,16 @@ impl Config {
         Config::from(Config::get_config_path()?.as_str())
     }
 
-    fn get_config_path() -> Result<String, io::Error> {
+    pub fn get_config_path() -> Result<String, io::Error> {
 
-        // go through the list of default locations  
+        let config_paths = Config::get_default_paths();
+        for path in config_paths {
+            if Path::new(path.as_str()).exists() {
+                return Ok(path);
+            }
+        }
 
-        Ok(String::from(""))
+        Err(io::Error::new(io::ErrorKind::NotFound, "Config file not found."))
     }
 
     fn get_default_paths() -> Vec<String> {
@@ -54,5 +66,3 @@ impl Config {
         default_paths
     }
 }
-
-const DEFAULT_CONFIG_PATH: &str = "./config/config.json";

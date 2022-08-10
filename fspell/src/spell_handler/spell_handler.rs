@@ -29,10 +29,10 @@ pub struct SearchParameters {
 }
 
 impl SpellHandler {
-    pub fn from_config(config: Config) -> Result<SpellHandler, io::Error> {
-        let spell_files = SpellHandler::read_files(config)?;
+    pub fn from_config(config: &Config) -> Result<SpellHandler, io::Error> {
+        let mut spell_files = SpellHandler::read_files(config)?;
 
-        let spell_list: Vec<Spell> = SpellHandler::files_to_spells(spell_files)?;
+        let spell_list: Vec<Spell> = SpellHandler::files_to_spells(&mut spell_files)?;
 
         Ok(SpellHandler {
             _spell_list: spell_list,
@@ -70,7 +70,7 @@ impl SpellHandler {
             })
     }
 
-    fn lines_to_spells(file: DirEntry, lines: io::Lines<io::BufReader<File>>) -> Vec<Spell> {
+    fn lines_to_spells(file: &DirEntry, lines: io::Lines<io::BufReader<File>>) -> Vec<Spell> {
         let mut spell_list: Vec<Spell> = Vec::new();
         let current_category = String::from(file.path().file_stem().unwrap().to_str().unwrap());
 
@@ -131,14 +131,14 @@ impl SpellHandler {
         spell_list
     }
 
-    fn files_to_spells(dir_content: ReadDir) -> Result<Vec<Spell>, io::Error> {
+    fn files_to_spells(dir_content: &mut ReadDir) -> Result<Vec<Spell>, io::Error> {
         let mut spell_list: Vec<Spell> = Vec::new();
 
         for dir_entry in dir_content {
             let file = dir_entry?;
             let file_path = file.path();
             let lines = SpellHandler::read_lines(file_path)?;
-            let mut spells = SpellHandler::lines_to_spells(file, lines);
+            let mut spells = SpellHandler::lines_to_spells(&file, lines);
 
             spell_list.append(&mut spells);
         }
@@ -146,7 +146,7 @@ impl SpellHandler {
         Ok(spell_list)
     }
 
-    fn read_files(config: Config) -> Result<ReadDir, std::io::Error> {
+    fn read_files(config: &Config) -> Result<ReadDir, std::io::Error> {
         println!(
             "{} {}",
             "Reading spells from:".green(),
