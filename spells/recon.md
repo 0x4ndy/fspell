@@ -230,3 +230,11 @@ snmpwalk -c <community_string> -v1 <ip> 1.3.6.1.2.1.6.13.1.3
 snmpwalk -c <community_string> -v1 <ip> 1.3.6.1.2.1.25.6.3.1.2
 ```
 ---
+
+# VULNs
+
+### nmap: vulnerability scanning
+```bash
+sudo nmap --script vuln <ip>
+```
+---
