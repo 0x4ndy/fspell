@@ -18,17 +18,11 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     };
 
-    let mut config_file: Option<String> = None;// Config::get_config_path();
+    let mut config_file: Option<String> = None;
     if args.is_config_file_set() {
         config_file = Some(args.config_file);
     }
-/*
-    println!(
-        "{} {}",
-        "Using config:".green(),
-        config_file.clone().bold().underlined()
-    );
-    */
+
 
     let search_parameters: SearchParameters = SearchParameters {
         category: args.category_name,
@@ -39,9 +33,12 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     println!("{:?}", search_parameters);
 
-    let config = Config::from(config_file.unwrap().as_str())?;
+    let config = match config_file {
+        None => Config::new()?,
+        Some(config_file) => Config::from(config_file.as_str())?,
+    };
 
-    let spell_handler = SpellHandler::from_config(config)?;
+    let spell_handler = SpellHandler::from_config(&config)?;
 
     let spell_list = spell_handler.search_spell(&search_parameters);
 
