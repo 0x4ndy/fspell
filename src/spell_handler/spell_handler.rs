@@ -82,7 +82,7 @@ impl SpellHandler {
 
         for (i, line) in lines.enumerate() {
             if let Ok(line) = line {
-                if line.starts_with("# ") {
+                if line.starts_with(STR_SUBCATEGORY_MARKER) {
                     match line.as_str().split_once(" ") {
                         None => panic!(
                             "Line {} is marked as category name, but it doesn't contain any value.",
@@ -90,7 +90,7 @@ impl SpellHandler {
                         ),
                         Some((_, sub_cat)) => current_sub_category = String::from(sub_cat),
                     }
-                } else if line.starts_with("### ") {
+                } else if line.starts_with(STR_TOOL_MARKER) {
                     match line.as_str().split_once(" ") {
                         None => panic!(
                             "Line {} is marked as spell title, but it doesn't contain any value.",
@@ -108,7 +108,7 @@ impl SpellHandler {
                             in_spell = true;
                         }
                     }
-                } else if line == "---" {
+                } else if line == STR_SPELL_END_MARKER {
                     let spell = Spell {
                         title: String::from(&current_title),
                         code: String::from(&current_code),
@@ -122,7 +122,7 @@ impl SpellHandler {
 
                     in_spell = false;
                     current_code = String::from("");
-                } else if !line.starts_with("```") && in_spell {
+                } else if !line.starts_with(STR_CODE_MARKER) && in_spell {
                     current_code.push_str(format!("{}\n", line).as_str());
                 }
             }
@@ -172,3 +172,8 @@ impl SpellHandler {
         Ok(io::BufReader::new(file).lines())
     }
 }
+
+const STR_SUBCATEGORY_MARKER: &str = "# ";
+const STR_TOOL_MARKER: &str = "### ";
+const STR_CODE_MARKER: &str = "```";
+const STR_SPELL_END_MARKER: &str = "---";
