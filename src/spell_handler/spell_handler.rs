@@ -82,7 +82,7 @@ impl SpellHandler {
 
         for (i, line) in lines.enumerate() {
             if let Ok(line) = line {
-                if line.starts_with(STR_SUBCATEGORY_MARKER) {
+                if line.starts_with(STR_SUBCATEGORY_MARKER) && !in_spell {
                     match line.as_str().split_once(" ") {
                         None => panic!(
                             "Line {} is marked as category name, but it doesn't contain any value.",
