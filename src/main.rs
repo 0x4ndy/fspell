@@ -23,7 +23,6 @@ fn main() -> Result<(), Box<dyn Error>> {
         config_file = Some(args.config_file);
     }
 
-
     let search_parameters: SearchParameters = SearchParameters {
         category: args.category_name,
         sub_category: args.subcategory_name,
